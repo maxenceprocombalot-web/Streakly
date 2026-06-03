@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: colors.orange,
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: '700',
     letterSpacing: -0.5,
   },

@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   chip: {
     width: CHIP,
-    height: CHIP,
+    height: 56,
     borderRadius: 12,
     ...cardBase,
     alignItems: 'center',

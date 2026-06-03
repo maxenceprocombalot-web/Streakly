@@ -60,6 +60,37 @@ export function getHabitWeekRate(
   return total > 0 ? Math.round((done / total) * 100) : 0;
 }
 
+export interface HeatmapDay {
+  dateKey: string;
+  ratio: number;
+}
+
+export function getHeatmapData(
+  habits: Habit[],
+  completions: Completion[],
+  endDate: Date,
+  weeks = 16,
+): HeatmapDay[] {
+  const result: HeatmapDay[] = [];
+  const totalDays = weeks * 7;
+
+  for (let i = totalDays - 1; i >= 0; i--) {
+    const date = addDays(endDate, -i);
+    const scheduled = getHabitsForDate(habits, date);
+    const key = toDateKey(date);
+    if (scheduled.length === 0) {
+      result.push({ dateKey: key, ratio: 0 });
+      continue;
+    }
+    const done = scheduled.filter((h) =>
+      completions.some((c) => c.habitId === h.id && c.date === key),
+    ).length;
+    result.push({ dateKey: key, ratio: done / scheduled.length });
+  }
+
+  return result;
+}
+
 export function getPerformanceMessage(weekRate: number): string {
   if (weekRate >= 90) {
     return t('stats.performance.elite');

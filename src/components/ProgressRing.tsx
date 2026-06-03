@@ -7,8 +7,8 @@ import { useTranslation } from '../i18n/useTranslation';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export const RING_SIZE = 160;
-const STROKE = 4;
+export const RING_SIZE = 216;
+const STROKE = 7;
 const R = (RING_SIZE - STROKE) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * R;
 
@@ -72,7 +72,10 @@ export function ProgressRing({
           />
         </Svg>
         <View style={styles.label}>
-          <Text style={styles.percent}>{displayPercent}%</Text>
+          <View style={styles.percentRow}>
+            <Text style={styles.percent}>{displayPercent}</Text>
+            <Text style={[styles.percentSign, { color: accentColor }]}>%</Text>
+          </View>
         </View>
       </View>
       <Text style={styles.subtitle}>
@@ -97,17 +100,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  percentRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
   percent: {
     color: colors.text,
-    fontSize: 28,
+    fontSize: 76,
+    fontWeight: '800',
+    letterSpacing: -4,
+    lineHeight: 80,
+  },
+  percentSign: {
+    fontSize: 17,
     fontWeight: '700',
-    letterSpacing: -1,
+    marginTop: 14,
+    lineHeight: 24,
   },
   subtitle: {
     color: colors.textSecondary,
-    fontSize: 18,
-    fontWeight: '500',
-    marginTop: 16,
+    fontSize: 17,
+    fontWeight: '400',
+    marginTop: 14,
     letterSpacing: -0.2,
   },
 });

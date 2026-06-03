@@ -51,11 +51,18 @@ export function StatsOverview({
       <Text style={styles.section}>{t('stats.last7Days')}</Text>
       <View style={styles.chart}>
         {weekProgress.map((day, i) => {
-          const h = day.total > 0 ? Math.max(4, day.ratio * 48) : 2;
+          const h = day.total > 0 ? Math.max(6, day.ratio * 84) : 3;
+          const active = day.total > 0 && day.ratio > 0;
           return (
             <View key={day.dateKey} style={styles.barCol}>
               <View style={styles.barTrack}>
-                <View style={[styles.bar, { height: h }]} />
+                <View
+                  style={[
+                    styles.bar,
+                    { height: h },
+                    active && styles.barActive,
+                  ]}
+                />
               </View>
               <Text style={styles.barLabel}>{dayLabels[i]}</Text>
             </View>
@@ -87,13 +94,17 @@ const styles = StyleSheet.create({
   },
   metricLabel: {
     ...typography.caption,
+    fontSize: 12,
     marginBottom: spacing.sm,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   metricValue: {
     color: colors.text,
-    fontSize: 28,
-    fontWeight: '600',
-    letterSpacing: -1,
+    fontSize: 44,
+    fontWeight: '700',
+    letterSpacing: -2,
+    lineHeight: 48,
   },
   section: {
     ...typography.sectionTitle,
@@ -104,26 +115,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: spacing.md,
+    paddingBottom: spacing.sm,
     marginBottom: spacing.lg,
+    alignItems: 'flex-end',
   },
   barCol: {
     flex: 1,
     alignItems: 'center',
   },
   barTrack: {
-    height: 52,
+    height: 84,
     justifyContent: 'flex-end',
+    width: '80%',
   },
   bar: {
-    width: 4,
-    borderRadius: 2,
-    backgroundColor: colors.textSecondary,
-    opacity: 0.35,
+    width: '100%',
+    borderRadius: 4,
+    backgroundColor: colors.ringTrack,
+  },
+  barActive: {
+    backgroundColor: colors.accent,
+    opacity: 0.85,
   },
   barLabel: {
-    ...typography.caption,
-    marginTop: spacing.sm,
+    color: colors.textSecondary,
     fontSize: 10,
+    fontWeight: '600',
+    marginTop: spacing.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.3,
   },
   messageBox: {
     ...cardBase,

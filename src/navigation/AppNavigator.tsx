@@ -4,6 +4,13 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { cardBorder, colors, radius, spacing } from '../constants/theme';
 import { useTranslation } from '../i18n/useTranslation';
+import {
+  IconBarChart,
+  IconFlash,
+  IconGear,
+  IconList,
+  IconPlus,
+} from '../components/Icons';
 import { CreateScreen } from '../screens/CreateScreen';
 import { ManageScreen } from '../screens/ManageScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
@@ -32,14 +39,6 @@ const navTheme = {
   },
 };
 
-const TAB_EMOJI: Record<keyof RootTabParamList, string> = {
-  Today: '⚡',
-  Manage: '☰',
-  Create: '＋',
-  Stats: '◫',
-  Settings: '⚙',
-};
-
 const TAB_LABEL_KEY: Record<keyof RootTabParamList, string> = {
   Today: 'tabs.today',
   Manage: 'tabs.manage',
@@ -48,6 +47,22 @@ const TAB_LABEL_KEY: Record<keyof RootTabParamList, string> = {
   Settings: 'tabs.settings',
 };
 
+function TabIcon({
+  name,
+  focused,
+}: {
+  name: keyof RootTabParamList;
+  focused: boolean;
+}) {
+  const stroke = focused ? colors.accent : colors.textSecondary;
+  const size = 22;
+  if (name === 'Today') return <IconFlash size={size} stroke={stroke} />;
+  if (name === 'Manage') return <IconList size={size} stroke={stroke} />;
+  if (name === 'Create') return <IconPlus size={size} stroke={stroke} />;
+  if (name === 'Stats') return <IconBarChart size={size} stroke={stroke} />;
+  return <IconGear size={size} stroke={stroke} />;
+}
+
 export function AppNavigator() {
   const { t } = useTranslation();
 
@@ -55,7 +70,6 @@ export function AppNavigator() {
     <NavigationContainer theme={navTheme}>
       <Tab.Navigator
         screenOptions={({ route }) => {
-          const emoji = TAB_EMOJI[route.name];
           const label = t(TAB_LABEL_KEY[route.name]);
           return {
             headerShown: false,
@@ -63,9 +77,7 @@ export function AppNavigator() {
             tabBarShowLabel: false,
             tabBarIcon: ({ focused }) => (
               <View style={[styles.tabItem, focused && styles.tabItemActive]}>
-                <Text style={[styles.icon, focused && styles.iconActive]}>
-                  {emoji}
-                </Text>
+                <TabIcon name={route.name} focused={focused} />
                 <Text style={[styles.label, focused && styles.labelActive]}>
                   {label}
                 </Text>
@@ -101,17 +113,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: radius.pill,
     minWidth: 56,
+    gap: 4,
   },
   tabItemActive: {
     backgroundColor: colors.accentSoft,
-  },
-  icon: {
-    fontSize: 24,
-    color: colors.textSecondary,
-    marginBottom: 3,
-  },
-  iconActive: {
-    color: colors.accent,
   },
   label: {
     fontSize: 11,

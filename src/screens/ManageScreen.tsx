@@ -19,7 +19,7 @@ import type { RootTabParamList } from '../navigation/AppNavigator';
 import { useHabitStore } from '../store/habitStore';
 import type { Habit, WeekDay } from '../types/habit';
 import { getHabitWeekRate } from '../utils/stats';
-import { hasIdentityUnlocked } from '../utils/habitStreak';
+import { getHabitConsecutiveStreak, hasIdentityUnlocked } from '../utils/habitStreak';
 
 export function ManageScreen() {
   const insets = useSafeAreaInsets();
@@ -83,6 +83,7 @@ export function ManageScreen() {
               key={habit.id}
               habit={habit}
               weekRate={getHabitWeekRate(habit.id, habit, completions, today)}
+              streak={getHabitConsecutiveStreak(habit, completions)}
               hasIdentity={hasIdentityUnlocked(habit, completions)}
               onToggleDay={(day) => handleToggleDay(habit, day)}
               onDelete={() => confirmDelete(habit)}

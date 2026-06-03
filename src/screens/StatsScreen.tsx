@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CoachSection } from '../components/CoachSection';
+import { HabitHeatmap } from '../components/HabitHeatmap';
 import { IdentitiesSection } from '../components/IdentitiesSection';
 import { PageHeader } from '../components/PageHeader';
 import { PrimaryButton } from '../components/PrimaryButton';
@@ -109,6 +110,12 @@ export function StatsScreen() {
             weekTotal={weekTotal}
             weekProgress={weekProgress}
           />
+
+          <Text style={styles.sectionTitle}>Activity</Text>
+          <View style={styles.heatmapCard}>
+            <HabitHeatmap habits={habits} completions={completions} />
+          </View>
+
           <PrimaryButton
             label={t('stats.shareStreak')}
             onPress={() => void handleShare()}
@@ -163,6 +170,15 @@ const styles = StyleSheet.create({
   tabTextActive: {
     color: colors.text,
     fontWeight: '600',
+  },
+  heatmapCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+    overflow: 'hidden',
   },
   shareBtn: {
     marginTop: spacing.md,

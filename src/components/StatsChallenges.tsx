@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -100,11 +101,17 @@ export function StatsChallenges() {
                     })}
                   </Text>
                 </View>
+                <Text style={styles.progressPercent}>{Math.round(p.progress)}%</Text>
               </View>
               <View style={styles.progressTrack}>
-                <View
-                  style={[styles.progressFill, { width: `${p.progress}%` }]}
-                />
+                <View style={[styles.progressFillWrap, { width: `${p.progress}%` }]}>
+                  <LinearGradient
+                    colors={['#8b7dff', '#7c6dfa']}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                    style={StyleSheet.absoluteFill}
+                  />
+                </View>
               </View>
             </View>
           ) : null,
@@ -205,16 +212,22 @@ const styles = StyleSheet.create({
     ...typography.caption,
     marginTop: 2,
   },
+  progressPercent: {
+    color: colors.accent,
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: -0.5,
+  },
   progressTrack: {
     height: 6,
     backgroundColor: colors.ringTrack,
     borderRadius: 3,
     overflow: 'hidden',
   },
-  progressFill: {
+  progressFillWrap: {
     height: '100%',
-    backgroundColor: colors.accent,
     borderRadius: 3,
+    overflow: 'hidden',
   },
   startRow: {
     ...cardBase,

@@ -122,6 +122,19 @@ export function CreateScreen() {
     >
       <PageHeader title={t('create.title')} />
 
+      {/* Step progress bar */}
+      <View style={styles.progressBar}>
+        {steps.map((_, i) => (
+          <View
+            key={i}
+            style={[
+              styles.progressSegment,
+              i <= step && styles.progressSegmentFill,
+            ]}
+          />
+        ))}
+      </View>
+
       <Text style={styles.stepLabel}>
         {t('create.stepLabel', {
           current: step + 1,
@@ -155,15 +168,14 @@ export function CreateScreen() {
               maxLength={60}
             />
             <Text style={styles.fieldLabel}>{t('create.category')}</Text>
-            <View style={styles.catRow}>
+            <View style={styles.pillRow}>
               {categories.map((c) => (
-                <Pressable key={c.id} onPress={() => setCategory(c.id)}>
-                  <Text
-                    style={[
-                      styles.catText,
-                      category === c.id && styles.catTextActive,
-                    ]}
-                  >
+                <Pressable
+                  key={c.id}
+                  onPress={() => setCategory(c.id)}
+                  style={[styles.pill, category === c.id && styles.pillActive]}
+                >
+                  <Text style={[styles.pillText, category === c.id && styles.pillTextActive]}>
                     {c.emoji} {c.label}
                   </Text>
                 </Pressable>
@@ -197,13 +209,17 @@ export function CreateScreen() {
               placeholderTextColor={colors.textSecondary}
             />
             <Text style={styles.fieldLabel}>{t('create.days')}</Text>
-            <View style={styles.daysRow}>
+            <View style={styles.pillRow}>
               {weekDayFull.map(({ day, label }) => {
                 const weekDay = day as WeekDay;
                 const active = daysOfWeek.includes(weekDay);
                 return (
-                  <Pressable key={day} onPress={() => toggleDay(weekDay)}>
-                    <Text style={[styles.dayText, active && styles.dayActive]}>
+                  <Pressable
+                    key={day}
+                    onPress={() => toggleDay(weekDay)}
+                    style={[styles.pill, active && styles.pillActive]}
+                  >
+                    <Text style={[styles.pillText, active && styles.pillTextActive]}>
                       {label}
                     </Text>
                   </Pressable>
@@ -274,6 +290,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  progressBar: {
+    flexDirection: 'row',
+    gap: 6,
+    marginBottom: spacing.sm,
+  },
+  progressSegment: {
+    flex: 1,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.ringTrack,
+  },
+  progressSegmentFill: {
+    backgroundColor: colors.accent,
+  },
   stepLabel: {
     ...typography.caption,
     marginBottom: spacing.md,
@@ -310,19 +340,31 @@ const styles = StyleSheet.create({
     borderColor: cardBorder,
     marginBottom: spacing.lg,
   },
-  catRow: {
+  pillRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.md,
+    gap: spacing.sm,
     marginBottom: spacing.lg,
   },
-  catText: {
-    ...typography.body,
-    opacity: 0.4,
+  pill: {
+    paddingVertical: 7,
+    paddingHorizontal: spacing.sm,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
   },
-  catTextActive: {
-    color: colors.text,
-    opacity: 1,
+  pillActive: {
+    backgroundColor: colors.accentSoft,
+    borderColor: 'rgba(124, 109, 250, 0.4)',
+  },
+  pillText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  pillTextActive: {
+    color: colors.accent,
     fontWeight: '600',
   },
   colorRow: {
@@ -338,20 +380,6 @@ const styles = StyleSheet.create({
   colorDotActive: {
     borderWidth: 2,
     borderColor: colors.white,
-  },
-  daysRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-  },
-  dayText: {
-    ...typography.body,
-    opacity: 0.35,
-  },
-  dayActive: {
-    color: colors.text,
-    opacity: 1,
-    fontWeight: '600',
   },
   notifRow: {
     flexDirection: 'row',

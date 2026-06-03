@@ -5,6 +5,7 @@ import { resolveHabitColor } from '../constants/habitColors';
 import { cardBase, colors, spacing } from '../constants/theme';
 import { useTranslation } from '../i18n/useTranslation';
 import type { Habit } from '../types/habit';
+import { IconCheck } from './Icons';
 
 interface HabitCardProps {
   habit: Habit;
@@ -173,8 +174,15 @@ export function HabitCard({
               </Text>
             </View>
           ) : null}
+          {isMissed && !isLocked ? (
+            <Pressable onPress={onLateValidate} style={styles.missedBadge}>
+              <Text style={styles.missedBadgeText}>{t('today.lateValidate')}</Text>
+            </Pressable>
+          ) : null}
           {completed && !isCelebrating && !isLocked ? (
-            <Text style={styles.check}>✓</Text>
+            <View style={styles.checkCircle}>
+              <IconCheck size={14} stroke={colors.white} strokeWidth={2.8} />
+            </View>
           ) : null}
 
           <Animated.View
@@ -215,12 +223,6 @@ export function HabitCard({
             </Pressable>
           </View>
         </View>
-      ) : null}
-
-      {isMissed ? (
-        <Pressable onPress={onLateValidate} style={styles.lateBtn}>
-          <Text style={styles.lateBtnText}>{t('today.lateValidate')}</Text>
-        </Pressable>
       ) : null}
     </View>
   );
@@ -292,10 +294,26 @@ const styles = StyleSheet.create({
     opacity: 0.75,
     color: colors.success,
   },
-  check: {
-    color: colors.success,
-    fontSize: 18,
-    fontWeight: '700',
+  checkCircle: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: colors.success,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  missedBadge: {
+    paddingVertical: 5,
+    paddingHorizontal: spacing.sm,
+    borderRadius: 8,
+    backgroundColor: 'rgba(232, 68, 90, 0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(232, 68, 90, 0.35)',
+  },
+  missedBadgeText: {
+    color: colors.danger,
+    fontSize: 13,
+    fontWeight: '600',
   },
   circleBurst: {
     position: 'absolute',
@@ -358,22 +376,6 @@ const styles = StyleSheet.create({
   },
   undoNoText: {
     color: colors.accent,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  lateBtn: {
-    marginTop: spacing.xs,
-    alignSelf: 'flex-start',
-    marginLeft: spacing.md + 4,
-    paddingVertical: 6,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 8,
-    backgroundColor: 'rgba(232, 68, 90, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(232, 68, 90, 0.35)',
-  },
-  lateBtnText: {
-    color: colors.danger,
     fontSize: 13,
     fontWeight: '600',
   },

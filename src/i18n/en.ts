@@ -1,7 +1,7 @@
 export const en = {
   tabs: {
     today: 'Today',
-    manage: 'Manage',
+    manage: 'Habits',
     create: 'Create',
     stats: 'Stats',
     settings: 'Settings',
@@ -54,7 +54,7 @@ export const en = {
     createFirst: 'Create my first habit',
     freeDayTitle: 'Free day',
     freeDayText:
-      'No habits scheduled for this day. Enjoy it or adjust your days in Manage.',
+      'No habits scheduled for this day. Enjoy it or adjust your days in Habits.',
     progressHabits: '%{done} / %{total} habits',
     undoPrompt: 'Undo check-in?',
     lateValidate: 'Check in late',
@@ -68,7 +68,7 @@ export const en = {
     use: 'Use my joker',
   },
   manage: {
-    title: 'Manage',
+    title: 'Habits',
     emptyTitle: 'No habits',
     emptyText: 'Tap + or go to Create to add your first routine.',
     weekRate: '%{rate}% · 7 days',

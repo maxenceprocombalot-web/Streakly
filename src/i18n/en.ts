@@ -226,6 +226,8 @@ export const en = {
     identityTitle: 'Streakly — Identity unlocked',
     identityBody:
       "🏆 You are now someone who %{name}. It's your identity now.",
+    weeklyTitle: 'Streakly — Weekly review',
+    weeklyBody: '📊 Check your stats and set up an even better week ahead.',
   },
   coachDemo: {
     p1: 'This week you show strong consistency on your morning habits. That is your strength — keep protecting that slot.',

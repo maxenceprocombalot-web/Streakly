@@ -17,6 +17,7 @@ Notifications.setNotificationHandler({
 });
 
 const STREAK_DANGER_ID = 'streak-danger-daily';
+const WEEKLY_SUMMARY_ID = 'weekly-summary-sunday';
 
 /** Demande les permissions de notification */
 export async function requestNotificationPermissions(): Promise<boolean> {
@@ -145,6 +146,38 @@ export async function scheduleStreakDangerNotification(
   });
 }
 
+/** Résumé hebdomadaire chaque dimanche à 18h */
+export async function scheduleWeeklySummaryNotification(): Promise<void> {
+  if (Platform.OS === 'web') {
+    return;
+  }
+
+  try {
+    await Notifications.cancelScheduledNotificationAsync(WEEKLY_SUMMARY_ID);
+  } catch {
+    // Pas encore planifiée
+  }
+
+  const granted = await requestNotificationPermissions();
+  if (!granted) {
+    return;
+  }
+
+  await Notifications.scheduleNotificationAsync({
+    identifier: WEEKLY_SUMMARY_ID,
+    content: {
+      title: t('notifications.weeklyTitle'),
+      body: t('notifications.weeklyBody'),
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
+      weekday: 1, // 1 = dimanche dans expo-notifications
+      hour: 18,
+      minute: 0,
+    },
+  });
+}
+
 export async function setupNotificationsOnLaunch(
   habits: Habit[],
   completions: Completion[],
@@ -156,4 +189,5 @@ export async function setupNotificationsOnLaunch(
   await requestNotificationPermissions();
   await rescheduleAll(habits);
   await scheduleStreakDangerNotification(habits, completions, jokerSavedDate);
+  await scheduleWeeklySummaryNotification();
 }

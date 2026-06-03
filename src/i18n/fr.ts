@@ -233,6 +233,8 @@ export const fr = {
     identityTitle: 'Streakly — Identité débloquée',
     identityBody:
       "🏆 Tu es maintenant quelqu'un qui %{name}. C'est ton identité maintenant.",
+    weeklyTitle: 'Streakly — Bilan de la semaine',
+    weeklyBody: '📊 Consulte tes stats et prépare une semaine encore meilleure.',
   },
   coachDemo: {
     p1: "Cette semaine tu montres une belle régularité sur tes habitudes du matin. C'est là que tu es le plus fort — continue à protéger ce créneau.",

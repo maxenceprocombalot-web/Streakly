@@ -17,8 +17,8 @@ interface ManageHabitCardProps {
 }
 
 function rateColor(rate: number): string {
-  if (rate >= 70) return colors.success;
-  if (rate >= 40) return colors.orange;
+  if (rate >= 80) return colors.success;
+  if (rate >= 50) return colors.orange;
   return colors.danger;
 }
 
@@ -53,7 +53,18 @@ export function ManageHabitCard({
             <Text style={styles.category}>{habit.category}</Text>
           </View>
         </View>
-        <Text style={[styles.rate, { color: rateColor(weekRate) }]}>{weekRate}%</Text>
+        <View style={styles.rateBlock}>
+          <Text style={[styles.rate, { color: rateColor(weekRate) }]}>{weekRate}%</Text>
+          <Text style={styles.rateLabel}>7J</Text>
+          <View style={styles.rateTrack}>
+            <View
+              style={[
+                styles.rateFill,
+                { width: `${weekRate}%` as any, backgroundColor: rateColor(weekRate) },
+              ]}
+            />
+          </View>
+        </View>
       </View>
 
       <View style={styles.bottomRow}>
@@ -146,11 +157,34 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textTransform: 'capitalize',
   },
+  rateBlock: {
+    alignItems: 'center',
+    minWidth: 52,
+  },
   rate: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: '700',
     letterSpacing: -1,
-    lineHeight: 34,
+    lineHeight: 32,
+  },
+  rateLabel: {
+    color: colors.textSecondary,
+    fontSize: 10,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    marginTop: 1,
+  },
+  rateTrack: {
+    width: 44,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.ringTrack,
+    marginTop: 4,
+    overflow: 'hidden',
+  },
+  rateFill: {
+    height: '100%',
+    borderRadius: 2,
   },
   bottomRow: {
     flexDirection: 'row',

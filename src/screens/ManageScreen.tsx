@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AdBanner } from '../components/AdBanner';
 import { FloatingActionButton } from '../components/FloatingActionButton';
 import { ManageHabitCard } from '../components/ManageHabitCard';
 import { PageHeader } from '../components/PageHeader';
@@ -92,6 +93,7 @@ export function ManageScreen() {
         )}
       </ScrollView>
 
+      <AdBanner />
       <FloatingActionButton
         bottom={insets.bottom + 78}
         onPress={() => navigation.navigate('Create')}

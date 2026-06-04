@@ -42,7 +42,14 @@
           "color": "#7c6dfa"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "iosAppId": "ca-app-pub-8940748455732058~3176329840"
+        }
+      ]
     ]
   }
 }

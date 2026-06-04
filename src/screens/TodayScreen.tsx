@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AdBanner } from '../components/AdBanner';
 import { HabitCard } from '../components/HabitCard';
 import { JokerBanner } from '../components/JokerBanner';
 import { MotivationalQuote } from '../components/MotivationalQuote';
@@ -247,6 +248,7 @@ export function TodayScreen() {
           })
         )}
       </ScrollView>
+      <AdBanner />
     </View>
   );
 }

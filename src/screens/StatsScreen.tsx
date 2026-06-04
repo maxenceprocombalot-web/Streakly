@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AdBanner } from '../components/AdBanner';
 import { CoachSection } from '../components/CoachSection';
 import { HabitHeatmap } from '../components/HabitHeatmap';
 import { IdentitiesSection } from '../components/IdentitiesSection';
@@ -74,6 +75,7 @@ export function StatsScreen() {
   ];
 
   return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
     <ScrollView
       style={styles.container}
       contentContainerStyle={{
@@ -140,6 +142,8 @@ export function StatsScreen() {
 
       {tab === 'challenges' ? <StatsChallenges /> : null}
     </ScrollView>
+    <AdBanner />
+    </View>
   );
 }
 

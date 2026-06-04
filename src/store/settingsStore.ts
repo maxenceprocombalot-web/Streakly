@@ -11,8 +11,13 @@ import {
 
 interface SettingsState {
   proModeEnabled: boolean;
+  isPro: boolean;
+  isPaywallOpen: boolean;
   locale: AppLocale;
   setProModeEnabled: (enabled: boolean) => void;
+  setIsPro: (value: boolean) => void;
+  openPaywall: () => void;
+  closePaywall: () => void;
   setLocale: (locale: AppLocale) => void;
 }
 
@@ -20,8 +25,13 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       proModeEnabled: false,
+      isPro: false,
+      isPaywallOpen: false,
       locale: getDeviceLocale(),
       setProModeEnabled: (enabled: boolean) => set({ proModeEnabled: enabled }),
+      setIsPro: (value: boolean) => set({ isPro: value }),
+      openPaywall: () => set({ isPaywallOpen: true }),
+      closePaywall: () => set({ isPaywallOpen: false }),
       setLocale: (locale: AppLocale) => {
         setI18nLocale(locale);
         void AsyncStorage.setItem(LOCALE_STORAGE_KEY, locale);
@@ -31,6 +41,11 @@ export const useSettingsStore = create<SettingsState>()(
     {
       name: 'streakly-settings-v1',
       storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        proModeEnabled: state.proModeEnabled,
+        isPro: state.isPro,
+        locale: state.locale,
+      }),
       onRehydrateStorage: () => (state) => {
         if (state?.locale) {
           setI18nLocale(state.locale);

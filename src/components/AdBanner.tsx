@@ -3,20 +3,20 @@ import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 
 import { useSettingsStore } from '../store/settingsStore';
 
-// En développement : IDs de test Google officiels
-// En production : vrai ID de bannière
 const BANNER_UNIT_ID = __DEV__
   ? Platform.select({
-      ios:     TestIds.ADAPTIVE_BANNER,
+      ios: TestIds.ADAPTIVE_BANNER,
       android: TestIds.ADAPTIVE_BANNER,
     }) ?? TestIds.ADAPTIVE_BANNER
   : 'ca-app-pub-8940748455732058/5292346978';
 
 export function AdBanner() {
-  const isPro = useSettingsStore((s) => s.proModeEnabled);
+  const isPro = useSettingsStore((s) => s.isPro);
+  const proModeEnabled = useSettingsStore((s) => s.proModeEnabled);
 
-  // Aucune pub pour les utilisateurs Pro
-  if (isPro) return null;
+  if (isPro || proModeEnabled) {
+    return null;
+  }
 
   return (
     <View style={styles.wrapper}>

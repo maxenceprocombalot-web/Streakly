@@ -11,7 +11,10 @@ import { PrimaryButton } from './PrimaryButton';
 
 export function CoachSection() {
   const { t } = useTranslation();
+  const isPro = useSettingsStore((s) => s.isPro);
   const proModeEnabled = useSettingsStore((s) => s.proModeEnabled);
+  const openPaywall = useSettingsStore((s) => s.openPaywall);
+  const isUnlocked = isPro || proModeEnabled;
   const habits = useHabitStore((s) => s.habits);
   const completions = useHabitStore((s) => s.completions);
   const jokerSavedDate = useHabitStore((s) => s.jokerSavedDate);
@@ -45,13 +48,14 @@ export function CoachSection() {
     <View style={styles.wrap}>
       <View style={styles.header}>
         <Text style={styles.title}>{t('coach.title')}</Text>
-        {!proModeEnabled ? <Text style={styles.lock}>🔒</Text> : null}
+        {!isUnlocked ? <Text style={styles.lock}>🔒</Text> : null}
       </View>
 
-      {!proModeEnabled ? (
-        <View style={styles.lockedCard}>
+      {!isUnlocked ? (
+        <Pressable style={styles.lockedCard} onPress={openPaywall}>
           <Text style={styles.lockedText}>{t('coach.locked')}</Text>
-        </View>
+          <Text style={styles.lockedCta}>Passer à Pro →</Text>
+        </Pressable>
       ) : (
         <>
           {!response && !loading ? (
@@ -119,6 +123,12 @@ const styles = StyleSheet.create({
   lockedText: {
     ...typography.body,
     lineHeight: 22,
+  },
+  lockedCta: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: spacing.sm,
   },
   btn: {
     width: '100%',

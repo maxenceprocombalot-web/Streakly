@@ -15,15 +15,17 @@
     "scheme": "streakly",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.streakly.app",
+      "bundleIdentifier": "com.streaklyapp.ios",
       "infoPlist": {
         "UIBackgroundModes": [
+          "remote-notification",
           "remote-notification"
-        ]
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "com.streakly.app",
+      "package": "com.streaklyapp.ios",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
@@ -49,8 +51,12 @@
           "androidAppId": "ca-app-pub-3940256099942544~3347511713",
           "iosAppId": "ca-app-pub-8940748455732058~3176329840"
         }
-      ],
-      "react-native-purchases"
-    ]
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6d3b2daf-208d-4e10-b6af-aca1a757e253"
+      }
+    }
   }
 }

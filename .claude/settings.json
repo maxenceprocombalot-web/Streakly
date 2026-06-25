@@ -53,6 +53,60 @@
     },
     "writing-skills": {
       "path": ".claude/skills/writing-skills/SKILL.md"
+    },
+    "gstack": {
+      "path": ".claude/skills/gstack/SKILL.md"
+    },
+    "babysit": {
+      "path": ".claude/skills/babysit/SKILL.md"
+    },
+    "design-is": {
+      "path": ".claude/skills/design-is/SKILL.md"
+    },
+    "do": {
+      "path": ".claude/skills/do/SKILL.md"
+    },
+    "how-it-works": {
+      "path": ".claude/skills/how-it-works/SKILL.md"
+    },
+    "knowledge-agent": {
+      "path": ".claude/skills/knowledge-agent/SKILL.md"
+    },
+    "learn-codebase": {
+      "path": ".claude/skills/learn-codebase/SKILL.md"
+    },
+    "make-plan": {
+      "path": ".claude/skills/make-plan/SKILL.md"
+    },
+    "mem-search": {
+      "path": ".claude/skills/mem-search/SKILL.md"
+    },
+    "oh-my-issues": {
+      "path": ".claude/skills/oh-my-issues/SKILL.md"
+    },
+    "pathfinder": {
+      "path": ".claude/skills/pathfinder/SKILL.md"
+    },
+    "smart-explore": {
+      "path": ".claude/skills/smart-explore/SKILL.md"
+    },
+    "standup": {
+      "path": ".claude/skills/standup/SKILL.md"
+    },
+    "timeline-report": {
+      "path": ".claude/skills/timeline-report/SKILL.md"
+    },
+    "version-bump": {
+      "path": ".claude/skills/version-bump/SKILL.md"
+    },
+    "weekly-digests": {
+      "path": ".claude/skills/weekly-digests/SKILL.md"
+    },
+    "what-the": {
+      "path": ".claude/skills/what-the/SKILL.md"
+    },
+    "wowerpoint": {
+      "path": ".claude/skills/wowerpoint/SKILL.md"
     }
   }
 }

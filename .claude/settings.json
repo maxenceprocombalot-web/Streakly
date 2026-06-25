@@ -5,6 +5,54 @@
   "skills": {
     "ui-ux-pro-max": {
       "path": ".claude/skills/ui-ux-pro-max/SKILL.md"
+    },
+    "find-skills": {
+      "path": ".claude/skills/find-skills/SKILL.md"
+    },
+    "frontend-design": {
+      "path": ".claude/skills/frontend-design/SKILL.md"
+    },
+    "brainstorming": {
+      "path": ".claude/skills/brainstorming/SKILL.md"
+    },
+    "dispatching-parallel-agents": {
+      "path": ".claude/skills/dispatching-parallel-agents/SKILL.md"
+    },
+    "executing-plans": {
+      "path": ".claude/skills/executing-plans/SKILL.md"
+    },
+    "finishing-a-development-branch": {
+      "path": ".claude/skills/finishing-a-development-branch/SKILL.md"
+    },
+    "receiving-code-review": {
+      "path": ".claude/skills/receiving-code-review/SKILL.md"
+    },
+    "requesting-code-review": {
+      "path": ".claude/skills/requesting-code-review/SKILL.md"
+    },
+    "subagent-driven-development": {
+      "path": ".claude/skills/subagent-driven-development/SKILL.md"
+    },
+    "systematic-debugging": {
+      "path": ".claude/skills/systematic-debugging/SKILL.md"
+    },
+    "test-driven-development": {
+      "path": ".claude/skills/test-driven-development/SKILL.md"
+    },
+    "using-git-worktrees": {
+      "path": ".claude/skills/using-git-worktrees/SKILL.md"
+    },
+    "using-superpowers": {
+      "path": ".claude/skills/using-superpowers/SKILL.md"
+    },
+    "verification-before-completion": {
+      "path": ".claude/skills/verification-before-completion/SKILL.md"
+    },
+    "writing-plans": {
+      "path": ".claude/skills/writing-plans/SKILL.md"
+    },
+    "writing-skills": {
+      "path": ".claude/skills/writing-skills/SKILL.md"
     }
   }
 }

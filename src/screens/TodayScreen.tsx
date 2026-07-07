@@ -12,6 +12,7 @@ import { PageHeader } from '../components/PageHeader';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { ProgressRing } from '../components/ProgressRing';
 import { PulsingEmptyRing } from '../components/PulsingEmptyRing';
+import { ShareStreakModal } from '../components/ShareStreakModal';
 import { StreakBadge } from '../components/StreakBadge';
 import { WeekDayBar } from '../components/WeekDayBar';
 import { resolveHabitColor } from '../constants/habitColors';
@@ -36,7 +37,9 @@ import {
 } from '../utils/date';
 import { hapticMedium, hapticSuccess } from '../utils/haptics';
 import { canOfferJoker } from '../utils/joker';
+import { getCrossedMilestone, type Milestone } from '../utils/milestones';
 import { getCurrentStreak, getStreakUpToDate } from '../utils/streak';
+import { maybeAskForReview } from '../services/storeReview';
 
 export function TodayScreen() {
   const { t } = useTranslation();
@@ -45,6 +48,8 @@ export function TodayScreen() {
     useNavigation<BottomTabNavigationProp<RootTabParamList>>();
   const [celebratingId, setCelebratingId] = useState<string | null>(null);
   const [undoHabitId, setUndoHabitId] = useState<string | null>(null);
+  const [shareVisible, setShareVisible] = useState(false);
+  const [shareMilestone, setShareMilestone] = useState<Milestone | null>(null);
 
   const habits = useHabitStore((s) => s.habits);
   const completions = useHabitStore((s) => s.completions);
@@ -56,6 +61,10 @@ export function TodayScreen() {
   const removeCompletion = useHabitStore((s) => s.removeCompletion);
   const isCompleted = useHabitStore((s) => s.isCompleted);
   const useJokerForYesterday = useHabitStore((s) => s.useJokerForYesterday);
+  const celebratedMilestones = useHabitStore((s) => s.celebratedMilestones);
+  const markMilestoneCelebrated = useHabitStore(
+    (s) => s.markMilestoneCelebrated,
+  );
 
   const didMountSync = useRef(false);
   useEffect(() => {
@@ -139,6 +148,28 @@ export function TodayScreen() {
     if (streakAfter > streakBefore) {
       void hapticMedium();
     }
+
+    const milestone = getCrossedMilestone(
+      streakBefore,
+      streakAfter,
+      celebratedMilestones,
+    );
+    if (milestone !== null) {
+      markMilestoneCelebrated(milestone);
+      // Laisse la mini-célébration de la carte se terminer d'abord
+      setTimeout(() => {
+        setShareMilestone(milestone);
+        setShareVisible(true);
+      }, 950);
+    }
+  };
+
+  const handleCloseShare = (): void => {
+    setShareVisible(false);
+    if (shareMilestone !== null) {
+      void maybeAskForReview(shareMilestone);
+      setShareMilestone(null);
+    }
   };
 
   const handleHabitPress = (habit: Habit): void => {
@@ -175,7 +206,17 @@ export function TodayScreen() {
         <PageHeader
           title={headerLabel}
           titleAccent={viewingToday}
-          right={<StreakBadge streak={streak} />}
+          right={
+            <Pressable
+              onPress={() => {
+                setShareMilestone(null);
+                setShareVisible(true);
+              }}
+              hitSlop={8}
+            >
+              <StreakBadge streak={streak} />
+            </Pressable>
+          }
         />
         <Text style={styles.dateSubtitle}>{dateSubtitle}</Text>
 
@@ -249,6 +290,13 @@ export function TodayScreen() {
         )}
       </ScrollView>
       <AdBanner />
+
+      <ShareStreakModal
+        visible={shareVisible}
+        streak={streak}
+        milestone={shareMilestone}
+        onClose={handleCloseShare}
+      />
     </View>
   );
 }

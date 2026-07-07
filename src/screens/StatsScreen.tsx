@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AdBanner } from '../components/AdBanner';
@@ -8,6 +8,7 @@ import { HabitHeatmap } from '../components/HabitHeatmap';
 import { IdentitiesSection } from '../components/IdentitiesSection';
 import { PageHeader } from '../components/PageHeader';
 import { PrimaryButton } from '../components/PrimaryButton';
+import { ShareStreakModal } from '../components/ShareStreakModal';
 import { StatsCalendar } from '../components/StatsCalendar';
 import { StatsChallenges } from '../components/StatsChallenges';
 import { StatsOverview } from '../components/StatsOverview';
@@ -62,11 +63,7 @@ export function StatsScreen() {
     [habits, completions],
   );
 
-  const handleShare = async (): Promise<void> => {
-    await Share.share({
-      message: t('stats.shareMessage', { streak: currentStreak }),
-    });
-  };
+  const [shareVisible, setShareVisible] = useState(false);
 
   const tabs: { id: StatsTab; labelKey: string }[] = [
     { id: 'overview', labelKey: 'stats.overview' },
@@ -120,7 +117,7 @@ export function StatsScreen() {
 
           <PrimaryButton
             label={t('stats.shareStreak')}
-            onPress={() => void handleShare()}
+            onPress={() => setShareVisible(true)}
             style={styles.shareBtn}
           />
 
@@ -143,6 +140,13 @@ export function StatsScreen() {
       {tab === 'challenges' ? <StatsChallenges /> : null}
     </ScrollView>
     <AdBanner />
+
+    <ShareStreakModal
+      visible={shareVisible}
+      streak={currentStreak}
+      milestone={null}
+      onClose={() => setShareVisible(false)}
+    />
     </View>
   );
 }

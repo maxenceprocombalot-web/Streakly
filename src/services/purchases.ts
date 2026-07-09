@@ -1,7 +1,16 @@
 import Purchases, { LOG_LEVEL, type PurchasesPackage } from 'react-native-purchases';
 import { Platform } from 'react-native';
 
-const API_KEY_IOS = 'test_pvTbMNshuNxa0fnGeiUvYzMGozW';
+// Clés RevenueCat.
+// En production, renseigner ces variables dans le fichier .env (non versionné) :
+//   EXPO_PUBLIC_RC_KEY_IOS     = appl_xxxxxxxxxxxxxxxxxxxx   (RevenueCat → Project → API keys → Apple App Store)
+//   EXPO_PUBLIC_RC_KEY_ANDROID = goog_xxxxxxxxxxxxxxxxxxxx   (RevenueCat → Project → API keys → Google Play Store)
+// À défaut (dev / sandbox), on retombe sur la clé de test iOS ci-dessous. Ne JAMAIS committer de vraie clé prod.
+const TEST_KEY_IOS = 'test_pvTbMNshuNxa0fnGeiUvYzMGozW';
+
+const API_KEY_IOS = process.env.EXPO_PUBLIC_RC_KEY_IOS ?? TEST_KEY_IOS;
+const API_KEY_ANDROID = process.env.EXPO_PUBLIC_RC_KEY_ANDROID ?? '';
+
 const ENTITLEMENT_ID = 'Streakly Pro';
 
 export async function initialiserRevenueCat(): Promise<void> {
@@ -13,6 +22,16 @@ export async function initialiserRevenueCat(): Promise<void> {
   }
   if (Platform.OS === 'ios') {
     Purchases.configure({ apiKey: API_KEY_IOS });
+  } else if (Platform.OS === 'android') {
+    if (!API_KEY_ANDROID) {
+      if (__DEV__) {
+        console.warn(
+          '[RevenueCat] EXPO_PUBLIC_RC_KEY_ANDROID manquante — achats désactivés sur Android.',
+        );
+      }
+      return;
+    }
+    Purchases.configure({ apiKey: API_KEY_ANDROID });
   }
 }
 

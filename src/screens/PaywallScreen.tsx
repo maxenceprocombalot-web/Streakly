@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import type { PurchasesPackage } from 'react-native-purchases';
-import { PackageType } from 'react-native-purchases';
+import { PACKAGE_TYPE } from 'react-native-purchases';
 
 import { colors, radius, spacing } from '../constants/theme';
 import { useTranslation } from '../i18n/useTranslation';
@@ -66,12 +66,12 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
     const offering = await getOfferings();
     const pkgs = offering?.availablePackages ?? [];
 
-    const find = (type: PackageType): PurchasesPackage | null =>
+    const find = (type: PACKAGE_TYPE): PurchasesPackage | null =>
       pkgs.find((p) => p.packageType === type) ?? null;
 
-    const monthly = find(PackageType.MONTHLY);
-    const annual = find(PackageType.ANNUAL);
-    const lifetime = find(PackageType.LIFETIME);
+    const monthly = find(PACKAGE_TYPE.MONTHLY);
+    const annual = find(PACKAGE_TYPE.ANNUAL);
+    const lifetime = find(PACKAGE_TYPE.LIFETIME);
 
     setTiers([
       {

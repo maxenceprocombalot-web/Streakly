@@ -184,7 +184,34 @@ fonctions de base. TODO: fournir un compte de démonstration Pro si nécessaire.
 
 ---
 
-## 7. Checklist avant soumission
+## 7. Captures d'écran App Store
+
+6 captures à prévoir pour la fiche App Store, dans l'ordre de conversion :
+**hook** (accroche émotionnelle) → **features** (les fonctionnalités qui vendent) →
+**social proof** (preuve sociale) → **CTA** (passage à l'action).
+
+Pour chaque capture : l'écran de l'app à photographier, le texte overlay marketing FR
+(court, orienté bénéfice) et une note EN pour la localisation.
+
+| # | Rôle | Écran à capturer | Overlay FR | Note EN |
+|---|------|------------------|------------|---------|
+| 1 | Hook | **Aujourd'hui** (`TodayScreen`) — compteur de série 🔥 bien visible | « Ne casse jamais la chaîne 🔥 » | "Never break the chain." Hook émotionnel sur le streak — le cœur du produit. |
+| 2 | Feature | **Joker mensuel** (carte Joker dans `SettingsScreen` ou le prompt « Streak en danger ») | « Un jour raté ? Ton joker sauve ta série. » | "Missed a day? Your monthly joker saves your streak." Lève l'objection n°1 : la peur de tout perdre. |
+| 3 | Feature | **Défis** (`ManageScreen` — section Défis, un défi 30 jours actif) | « Relève un défi de 30 jours. » | "Take on a 30-day challenge." Montre la progression et l'engagement long terme. |
+| 4 | Feature | **Coach IA** (modal Coach IA) | « Ton coach IA, disponible 24/7. » | "Your AI coach, available 24/7." Différenciateur premium — la valeur qui justifie le Pro. |
+| 5 | Social proof | **Partage de streak** (carte de partage social depuis `TodayScreen`) | « Partage tes streaks, inspire les autres. » | "Share your streaks — inspire others." Preuve sociale : d'autres le font déjà, rejoins-les. |
+| 6 | CTA | **Passe Pro** (`PaywallScreen`) | « Passe en Pro. Va au bout. » | "Go Pro. Go all the way." CTA final — dernière capture, celle qui déclenche le téléchargement. |
+
+### Notes de production
+
+- **Format** : captures verticales (iPhone 6.9" et 6.5" requis par App Store Connect), overlays lisibles même en vignette.
+- **Cohérence** : même palette et même typo que l'app sur les 6 overlays ; le 🔥 récurrent crée un fil visuel.
+- **Données de démo** : afficher des séries crédibles mais aspirationnelles (ex. 21, 30, 66 jours) plutôt que 0 ou des chiffres énormes.
+- **EN** : décliner chaque overlay dans une seconde série de captures pour la fiche App Store US (localisation `en`).
+
+---
+
+## 8. Checklist avant soumission
 
 - [ ] Titre FR / EN ≤ 30 caractères, marque + mot-clé validés
 - [ ] Sous-titre FR / EN ≤ 30 caractères
@@ -193,5 +220,5 @@ fonctions de base. TODO: fournir un compte de démonstration Pro si nécessaire.
 - [ ] Descriptions relues (ton FR, natif EN)
 - [ ] Catégories principale + secondaire arbitrées
 - [ ] Abonnement Pro & pubs déclarés (confidentialité + notes review)
-- [ ] Captures d'écran cohérentes avec les features listées (TODO: hors de ce doc)
+- [ ] Captures d'écran produites selon la section 7 (6 écrans, overlays FR + EN)
 ```

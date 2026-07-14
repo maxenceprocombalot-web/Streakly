@@ -60,6 +60,17 @@ export const fr = {
     lateValidate: 'Valider en retard',
     availableIn: 'Disponible dans %{count} jour',
     availableIn_plural: 'Disponible dans %{count} jours',
+    a11y: {
+      habitDone: '%{name}, validée',
+      habitTodo: '%{name}, à valider',
+      habitMissed: '%{name}, manquée',
+      habitLocked: '%{name}, verrouillée',
+      hintValidate: 'Toucher deux fois pour valider',
+      hintUndo: 'Toucher deux fois pour annuler la validation',
+      lateValidate: 'Valider %{name} en retard',
+      undoConfirm: "Confirmer l'annulation",
+      undoCancel: 'Garder la validation',
+    },
   },
   joker: {
     title: 'Streak en danger hier',

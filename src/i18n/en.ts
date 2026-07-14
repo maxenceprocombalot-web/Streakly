@@ -60,6 +60,17 @@ export const en = {
     lateValidate: 'Check in late',
     availableIn: 'Available in %{count} day',
     availableIn_plural: 'Available in %{count} days',
+    a11y: {
+      habitDone: '%{name}, completed',
+      habitTodo: '%{name}, to check in',
+      habitMissed: '%{name}, missed',
+      habitLocked: '%{name}, locked',
+      hintValidate: 'Double tap to check in',
+      hintUndo: 'Double tap to undo the check-in',
+      lateValidate: 'Check in %{name} late',
+      undoConfirm: 'Confirm undo',
+      undoCancel: 'Keep the check-in',
+    },
   },
   joker: {
     title: 'Streak at risk yesterday',

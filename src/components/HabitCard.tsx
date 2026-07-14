@@ -47,6 +47,29 @@ export function HabitCard({
         ? colors.danger
         : resolveHabitColor(habit.color);
 
+  const statusLabel = isLocked
+    ? t('today.a11y.habitLocked', { name: habit.name })
+    : completed
+      ? t('today.a11y.habitDone', { name: habit.name })
+      : isMissed
+        ? t('today.a11y.habitMissed', { name: habit.name })
+        : t('today.a11y.habitTodo', { name: habit.name });
+
+  const lockedSuffix = isLocked
+    ? ` · ${
+        daysUntilAvailable === 1
+          ? t('today.availableIn', { count: 1 })
+          : t('today.availableIn_plural', { count: daysUntilAvailable })
+      }`
+    : '';
+
+  const cardAccessibilityLabel = `${statusLabel}${lockedSuffix}`;
+  const cardAccessibilityHint = isLocked || isMissed
+    ? undefined
+    : completed
+      ? t('today.a11y.hintUndo')
+      : t('today.a11y.hintValidate');
+
   const cardScale = useRef(new Animated.Value(1)).current;
   const barScale = useRef(new Animated.Value(1)).current;
   const circleScale = useRef(new Animated.Value(0)).current;
@@ -144,6 +167,10 @@ export function HabitCard({
         <Pressable
           onPress={onPress}
           disabled={isLocked}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: completed, disabled: isLocked }}
+          accessibilityLabel={cardAccessibilityLabel}
+          accessibilityHint={cardAccessibilityHint}
           style={({ pressed }) => [
             styles.card,
             completed && !isLocked && styles.cardCompleted,
@@ -175,7 +202,12 @@ export function HabitCard({
             </View>
           ) : null}
           {isMissed && !isLocked ? (
-            <Pressable onPress={onLateValidate} style={styles.missedBadge}>
+            <Pressable
+              onPress={onLateValidate}
+              accessibilityRole="button"
+              accessibilityLabel={t('today.a11y.lateValidate', { name: habit.name })}
+              style={styles.missedBadge}
+            >
               <Text style={styles.missedBadgeText}>{t('today.lateValidate')}</Text>
             </Pressable>
           ) : null}
@@ -215,10 +247,20 @@ export function HabitCard({
         <View style={styles.undoRow}>
           <Text style={styles.undoText}>{t('today.undoPrompt')}</Text>
           <View style={styles.undoActions}>
-            <Pressable onPress={onUndoConfirm} style={styles.undoYes}>
+            <Pressable
+              onPress={onUndoConfirm}
+              accessibilityRole="button"
+              accessibilityLabel={t('today.a11y.undoConfirm')}
+              style={styles.undoYes}
+            >
               <Text style={styles.undoYesText}>{t('common.yes')}</Text>
             </Pressable>
-            <Pressable onPress={onUndoCancel} style={styles.undoNo}>
+            <Pressable
+              onPress={onUndoCancel}
+              accessibilityRole="button"
+              accessibilityLabel={t('today.a11y.undoCancel')}
+              style={styles.undoNo}
+            >
               <Text style={styles.undoNoText}>{t('common.no')}</Text>
             </Pressable>
           </View>

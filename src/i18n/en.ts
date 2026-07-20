@@ -78,6 +78,7 @@ export const en = {
     cancel: 'Cancel',
     keepOneDay: 'Keep at least one active day.',
     alertTitle: 'Warning',
+    addA11y: 'Add a habit',
   },
   create: {
     title: 'Create',

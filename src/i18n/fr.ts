@@ -78,6 +78,7 @@ export const fr = {
     cancel: 'Annuler',
     keepOneDay: 'Garde au moins un jour actif.',
     alertTitle: 'Attention',
+    addA11y: 'Ajouter une habitude',
   },
   create: {
     title: 'Créer',

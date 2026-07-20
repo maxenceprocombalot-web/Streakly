@@ -97,6 +97,7 @@ export function ManageScreen() {
       <FloatingActionButton
         bottom={insets.bottom + 78}
         onPress={() => navigation.navigate('Create')}
+        accessibilityLabel={t('manage.addA11y')}
       />
     </View>
   );

@@ -3,6 +3,7 @@ import { Animated, Easing, StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 import { colors } from '../constants/theme';
+import { useReducedMotion } from '../utils/useReducedMotion';
 import { RING_SIZE } from './ProgressRing';
 
 const STROKE = 4;
@@ -15,8 +16,14 @@ interface PulsingEmptyRingProps {
 /** Anneau vide avec pulse doux pour l'état sans habitudes */
 export function PulsingEmptyRing({ color = colors.accent }: PulsingEmptyRingProps) {
   const pulse = useRef(new Animated.Value(1)).current;
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) {
+      pulse.setValue(1);
+      return;
+    }
+
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(pulse, {
@@ -35,7 +42,7 @@ export function PulsingEmptyRing({ color = colors.accent }: PulsingEmptyRingProp
     );
     loop.start();
     return () => loop.stop();
-  }, [pulse]);
+  }, [pulse, reducedMotion]);
 
   return (
     <Animated.View style={[styles.wrapper, { transform: [{ scale: pulse }] }]}>

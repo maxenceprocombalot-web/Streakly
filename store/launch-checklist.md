@@ -11,7 +11,7 @@ Tout ce qui reste à faire, dans l'ordre. Les cases ✅ sont déjà faites (par 
 - [x] Textes de fiche store FR/EN prêts (`store/listing-fr.md` / `listing-en.md`)
 
 ## 1️⃣ Comptes (à faire une fois)
-- [ ] Apple Developer Program — 99 €/an → https://developer.apple.com/programs/enroll/
+- [x] Apple Developer Program — 99 €/an ✓ (déjà actif)
 - [ ] Google Play Console — 25 $ une fois → https://play.google.com/console/signup
 - [ ] Compte Expo (gratuit) pour EAS Build → https://expo.dev
 
@@ -75,9 +75,8 @@ npx eas submit --platform android
       → recrute 12 amis/famille dès maintenant pour lancer le chrono
 
 ## ⚠️ Pièges connus
-- Le **package Android** est `com.streaklyapp.ios` (suffixe ".ios" sur Android).
-  Il est définitif après le premier upload Play. Si tu veux le corriger en
-  `com.streaklyapp.android`, c'est MAINTENANT ou jamais.
+- Le **package Android** est `com.streaklyapp.android` (corrigé ✓). Il devient
+  définitif après le premier upload sur Google Play — ne plus y toucher.
 - Les achats sandbox iOS nécessitent un **compte Sandbox** (App Store Connect →
   Utilisateurs et accès → Sandbox).
 - La demande ATT apparaît au premier lancement — ne pas la retirer, Apple la vérifie.

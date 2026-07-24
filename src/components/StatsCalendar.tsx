@@ -58,6 +58,24 @@ export function StatsCalendar({
     return done / scheduled.length;
   };
 
+  // Libellé lu par VoiceOver/TalkBack pour une case du calendrier :
+  // date complète + nombre d'habitudes validées, sinon aucune prévue.
+  const describeDay = (date: Date): string => {
+    const dateLabel = date.toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+    });
+    const scheduled = getHabitsForDate(habits, date);
+    if (scheduled.length === 0) {
+      return `${dateLabel}, aucune habitude prévue`;
+    }
+    const key = toDateKey(date);
+    const done = scheduled.filter((h) =>
+      completions.some((c) => c.habitId === h.id && c.date === key),
+    ).length;
+    return `${dateLabel}, ${done} validée${done > 1 ? 's' : ''} sur ${scheduled.length}`;
+  };
+
   const detailHabits = detailDate
     ? getHabitsForDate(habits, parseDateKey(detailDate))
     : [];
@@ -66,18 +84,31 @@ export function StatsCalendar({
     <View>
       <View style={styles.calendarCard}>
         <View style={styles.nav}>
-          <Pressable onPress={() => onChangeMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>
+          <Pressable
+            onPress={() => onChangeMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}
+            accessibilityRole="button"
+            accessibilityLabel="Mois précédent"
+          >
             <Text style={styles.navText}>‹</Text>
           </Pressable>
-          <Text style={styles.monthTitle}>
+          <Text style={styles.monthTitle} accessibilityRole="header">
             {MONTH_NAMES[month.getMonth()]} {month.getFullYear()}
           </Text>
-          <Pressable onPress={() => onChangeMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}>
+          <Pressable
+            onPress={() => onChangeMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
+            accessibilityRole="button"
+            accessibilityLabel="Mois suivant"
+          >
             <Text style={styles.navText}>›</Text>
           </Pressable>
         </View>
 
-        <View style={styles.weekHeader}>
+        {/* En-tête des jours purement visuel (deux « M » ambigus) : masqué aux lecteurs d'écran, chaque case annonce déjà sa date complète. */}
+        <View
+          style={styles.weekHeader}
+          importantForAccessibility="no-hide-descendants"
+          accessibilityElementsHidden
+        >
           {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, i) => (
             <Text key={`wh-${i}`} style={styles.weekDay}>{d}</Text>
           ))}
@@ -86,7 +117,14 @@ export function StatsCalendar({
         <View style={styles.grid}>
           {cells.map((date, i) => {
             if (!date) {
-              return <View key={`empty-${i}`} style={styles.cell} />;
+              return (
+                <View
+                  key={`empty-${i}`}
+                  style={styles.cell}
+                  importantForAccessibility="no-hide-descendants"
+                  accessibilityElementsHidden
+                />
+              );
             }
             const intensity = getIntensity(date);
             const key = toDateKey(date);
@@ -96,6 +134,9 @@ export function StatsCalendar({
                 key={key}
                 style={styles.cell}
                 onPress={() => setDetailDate(key)}
+                accessibilityRole="button"
+                accessibilityLabel={describeDay(date)}
+                accessibilityHint="Voir le détail du jour"
               >
                 <View
                   style={[
@@ -111,9 +152,14 @@ export function StatsCalendar({
       </View>
 
       <Modal visible={detailDate !== null} transparent animationType="fade">
-        <Pressable style={styles.modalOverlay} onPress={() => setDetailDate(null)}>
-          <View style={styles.modalSheet}>
-            <Text style={styles.modalTitle}>
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setDetailDate(null)}
+          accessibilityRole="button"
+          accessibilityLabel="Fermer le détail du jour"
+        >
+          <View style={styles.modalSheet} accessibilityViewIsModal>
+            <Text style={styles.modalTitle} accessibilityRole="header">
               {detailDate
                 ? parseDateKey(detailDate).toLocaleDateString('fr-FR', {
                     weekday: 'long',
@@ -130,15 +176,24 @@ export function StatsCalendar({
                   (c) => c.habitId === h.id && c.date === detailDate,
                 );
                 return (
-                  <View key={h.id} style={styles.modalRow}>
-                    <Text style={styles.modalEmoji}>{h.emoji}</Text>
+                  <View
+                    key={h.id}
+                    style={styles.modalRow}
+                    accessible
+                    accessibilityLabel={`${h.name}, ${done ? 'validée' : 'non validée'}`}
+                  >
+                    <Text style={styles.modalEmoji} importantForAccessibility="no">{h.emoji}</Text>
                     <Text style={styles.modalName}>{h.name}</Text>
                     <Text style={styles.modalStatus}>{done ? '✓' : '—'}</Text>
                   </View>
                 );
               })
             )}
-            <Pressable onPress={() => setDetailDate(null)}>
+            <Pressable
+              onPress={() => setDetailDate(null)}
+              accessibilityRole="button"
+              accessibilityLabel="Fermer"
+            >
               <Text style={styles.modalClose}>Fermer</Text>
             </Pressable>
           </View>

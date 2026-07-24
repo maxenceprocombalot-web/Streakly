@@ -27,6 +27,7 @@ export default function App() {
   const setIsPro = useSettingsStore((s) => s.setIsPro);
   const isPaywallOpen = useSettingsStore((s) => s.isPaywallOpen);
   const closePaywall = useSettingsStore((s) => s.closePaywall);
+  const openPaywall = useSettingsStore((s) => s.openPaywall);
 
   const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
   const [localeReady, setLocaleReady] = useState(false);
@@ -94,7 +95,18 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <StatusBar style="light" />
-        <OnboardingFlow onComplete={() => setOnboardingDone(true)} />
+        <OnboardingFlow
+          onComplete={() => {
+            setOnboardingDone(true);
+            // Paywall doux post-onboarding (fermable) : le moment où
+            // l'intention est la plus forte — meilleur taux de conversion.
+            setTimeout(() => {
+              if (!useSettingsStore.getState().isPro) {
+                openPaywall();
+              }
+            }, 600);
+          }}
+        />
       </SafeAreaProvider>
     );
   }

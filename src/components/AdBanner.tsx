@@ -3,12 +3,23 @@ import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 
 import { useSettingsStore } from '../store/settingsStore';
 
-const BANNER_UNIT_ID = __DEV__
-  ? Platform.select({
-      ios: TestIds.ADAPTIVE_BANNER,
-      android: TestIds.ADAPTIVE_BANNER,
-    }) ?? TestIds.ADAPTIVE_BANNER
-  : 'ca-app-pub-8940748455732058/5292346978';
+/**
+ * ⚠️ PRODUCTION Android : créer l'app + le bloc bannière dans AdMob
+ * et remplacer le placeholder ci-dessous par le vrai ID (ca-app-pub-xxx/yyy).
+ */
+const PROD_UNIT_ID_IOS = 'ca-app-pub-8940748455732058/5292346978';
+const PROD_UNIT_ID_ANDROID = 'REMPLACER_PAR_ID_BANNIERE_ANDROID';
+
+const prodUnitId =
+  Platform.select({ ios: PROD_UNIT_ID_IOS, android: PROD_UNIT_ID_ANDROID }) ??
+  PROD_UNIT_ID_IOS;
+
+// Tant que l'ID réel n'est pas configuré, on sert la bannière de test
+// (afficher l'ID d'exemple en prod = zéro revenu + risque de ban AdMob).
+const BANNER_UNIT_ID =
+  __DEV__ || prodUnitId.includes('REMPLACER')
+    ? TestIds.ADAPTIVE_BANNER
+    : prodUnitId;
 
 export function AdBanner() {
   const isPro = useSettingsStore((s) => s.isPro);

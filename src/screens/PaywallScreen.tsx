@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -222,6 +223,29 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
         <Text style={styles.legal}>
           L'abonnement se renouvelle automatiquement. Annulable à tout moment.
         </Text>
+        <View style={styles.legalLinks}>
+          <Pressable
+            onPress={() =>
+              void Linking.openURL(
+                'https://maxenceprocombalot-web.github.io/Streakly/terms.html',
+              )
+            }
+            hitSlop={8}
+          >
+            <Text style={styles.legalLink}>Conditions d'utilisation</Text>
+          </Pressable>
+          <Text style={styles.legalDot}>·</Text>
+          <Pressable
+            onPress={() =>
+              void Linking.openURL(
+                'https://maxenceprocombalot-web.github.io/Streakly/privacy.html',
+              )
+            }
+            hitSlop={8}
+          >
+            <Text style={styles.legalLink}>Confidentialité</Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -384,5 +408,22 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     opacity: 0.6,
     paddingHorizontal: spacing.md,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.xs,
+  },
+  legalLink: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    textDecorationLine: 'underline',
+  },
+  legalDot: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    opacity: 0.6,
   },
 });

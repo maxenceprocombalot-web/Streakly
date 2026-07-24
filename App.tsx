@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
+import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
 import { useEffect, useState } from 'react';
-import { Modal, SafeAreaView, StyleSheet } from 'react-native';
+import { Modal, Platform, SafeAreaView, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { OnboardingFlow } from './src/components/OnboardingFlow';
@@ -32,6 +33,15 @@ export default function App() {
 
   useEffect(() => {
     void initAppLocale().then(() => setLocaleReady(true));
+  }, []);
+
+  // iOS : App Tracking Transparency — requis par Apple avant toute pub.
+  // Sur Android et à chaque lancement suivant, l'appel est un no-op.
+  useEffect(() => {
+    if (Platform.OS !== 'ios') {
+      return;
+    }
+    void requestTrackingPermissionsAsync().catch(() => undefined);
   }, []);
 
   useEffect(() => {

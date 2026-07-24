@@ -5,7 +5,7 @@ import { resolveHabitColor } from '../constants/habitColors';
 import { cardBase, colors, spacing } from '../constants/theme';
 import { useTranslation } from '../i18n/useTranslation';
 import type { Habit, WeekDay } from '../types/habit';
-import { getWeekDayLabels } from '../utils/date';
+import { getWeekDayFull, getWeekDayLabels } from '../utils/date';
 
 interface ManageHabitCardProps {
   habit: Habit;
@@ -32,6 +32,10 @@ export function ManageHabitCard({
 }: ManageHabitCardProps) {
   const { t, locale } = useTranslation();
   const weekDayLabels = useMemo(() => getWeekDayLabels(), [locale]);
+  const fullDayLabels = useMemo(
+    () => new Map(getWeekDayFull().map(({ day, label }) => [day, label])),
+    [locale],
+  );
   const habitColor = resolveHabitColor(habit.color);
 
   return (
@@ -45,7 +49,11 @@ export function ManageHabitCard({
           </View>
           <View style={styles.metaRow}>
             {streak > 0 ? (
-              <View style={styles.streakBadge}>
+              <View
+                style={styles.streakBadge}
+                accessible
+                accessibilityLabel={t('manage.a11y.streak', { days: streak })}
+              >
                 <Text style={styles.streakFire}>🔥</Text>
                 <Text style={styles.streakVal}>{streak}</Text>
               </View>
@@ -53,10 +61,14 @@ export function ManageHabitCard({
             <Text style={styles.category}>{habit.category}</Text>
           </View>
         </View>
-        <View style={styles.rateBlock}>
+        <View
+          style={styles.rateBlock}
+          accessible
+          accessibilityLabel={t('manage.a11y.weekRate', { rate: weekRate })}
+        >
           <Text style={[styles.rate, { color: rateColor(weekRate) }]}>{weekRate}%</Text>
           <Text style={styles.rateLabel}>7J</Text>
-          <View style={styles.rateTrack}>
+          <View style={styles.rateTrack} importantForAccessibility="no-hide-descendants">
             <View
               style={[
                 styles.rateFill,
@@ -76,20 +88,33 @@ export function ManageHabitCard({
               <Pressable
                 key={`${habit.id}-${day}`}
                 onPress={() => onToggleDay(weekDay)}
+                accessibilityRole="button"
+                accessibilityLabel={fullDayLabels.get(day) ?? short}
+                accessibilityState={{ selected: active }}
+                accessibilityHint={t('manage.a11y.dayToggleHint')}
                 style={[
                   styles.dayPill,
                   active && { backgroundColor: `${habitColor}28`, borderColor: `${habitColor}66` },
                 ]}
               >
-                <Text style={[styles.dayPillText, active && { color: habitColor }]}>
+                <Text
+                  style={[styles.dayPillText, active && { color: habitColor }]}
+                  importantForAccessibility="no"
+                >
                   {short}
                 </Text>
               </Pressable>
             );
           })}
         </View>
-        <Pressable onPress={onDelete} hitSlop={12} style={styles.deleteBtn}>
-          <Text style={styles.delete}>×</Text>
+        <Pressable
+          onPress={onDelete}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t('manage.a11y.deleteHabit', { name: habit.name })}
+          style={styles.deleteBtn}
+        >
+          <Text style={styles.delete} importantForAccessibility="no">×</Text>
         </Pressable>
       </View>
     </View>

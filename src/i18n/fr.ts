@@ -90,6 +90,12 @@ export const fr = {
     keepOneDay: 'Garde au moins un jour actif.',
     alertTitle: 'Attention',
     addA11y: 'Ajouter une habitude',
+    a11y: {
+      dayToggleHint: 'Appuie deux fois pour activer ou désactiver ce jour',
+      deleteHabit: "Supprimer l'habitude %{name}",
+      weekRate: 'Réussite sur 7 jours : %{rate}%',
+      streak: "Série en cours : %{days} jour(s)",
+    },
   },
   create: {
     title: 'Créer',

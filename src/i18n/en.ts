@@ -90,6 +90,12 @@ export const en = {
     keepOneDay: 'Keep at least one active day.',
     alertTitle: 'Warning',
     addA11y: 'Add a habit',
+    a11y: {
+      dayToggleHint: 'Double tap to turn this day on or off',
+      deleteHabit: 'Delete the habit %{name}',
+      weekRate: '7-day completion: %{rate}%',
+      streak: 'Current streak: %{days} day(s)',
+    },
   },
   create: {
     title: 'Create',

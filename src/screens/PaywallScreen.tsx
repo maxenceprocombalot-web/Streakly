@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -21,12 +22,11 @@ import {
 } from '../services/purchases';
 import { useSettingsStore } from '../store/settingsStore';
 
+/** Bénéfices réellement livrés — ne rien promettre qui n'existe pas (rejet Apple) */
 const BENEFITS = [
-  { emoji: '🚫', label: 'Sans publicités' },
-  { emoji: '📊', label: 'Stats avancées' },
-  { emoji: '🎨', label: 'Couleurs illimitées' },
-  { emoji: '🪟', label: 'Widgets iOS (bientôt)' },
-  { emoji: '🤖', label: 'Coach IA personnel' },
+  { emoji: '🚫', labelKey: 'paywall.benefitNoAds' },
+  { emoji: '🤖', labelKey: 'paywall.benefitCoach' },
+  { emoji: '🚀', labelKey: 'paywall.benefitFuture' },
 ];
 
 interface ProductTier {
@@ -36,12 +36,6 @@ interface ProductTier {
   badge?: string;
   rcPackage: PurchasesPackage | null;
 }
-
-const FALLBACK_TIERS: Omit<ProductTier, 'rcPackage'>[] = [
-  { id: 'monthly', label: 'Mensuel', price: '2,99€ / mois' },
-  { id: 'annual', label: 'Annuel', price: '19,99€ / an', badge: 'Économie 44%' },
-  { id: 'lifetime', label: 'Lifetime', price: '49,99€' },
-];
 
 interface PaywallScreenProps {
   onClose: () => void;
@@ -76,21 +70,21 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
     setTiers([
       {
         id: 'monthly',
-        label: 'Mensuel',
-        price: monthly?.product.priceString ?? '2,99€ / mois',
+        label: t('paywall.tierMonthly'),
+        price: monthly?.product.priceString ?? t('paywall.fallbackMonthly'),
         rcPackage: monthly,
       },
       {
         id: 'annual',
-        label: 'Annuel',
-        price: annual?.product.priceString ?? '19,99€ / an',
-        badge: 'Économie 44%',
+        label: t('paywall.tierAnnual'),
+        price: annual?.product.priceString ?? t('paywall.fallbackAnnual'),
+        badge: t('paywall.savings'),
         rcPackage: annual,
       },
       {
         id: 'lifetime',
-        label: 'Lifetime',
-        price: lifetime?.product.priceString ?? '49,99€',
+        label: t('paywall.tierLifetime'),
+        price: lifetime?.product.priceString ?? t('paywall.fallbackLifetime'),
         rcPackage: lifetime,
       },
     ]);
@@ -99,7 +93,7 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
 
   const handlePurchase = async (tier: ProductTier): Promise<void> => {
     if (!tier.rcPackage) {
-      Alert.alert('Indisponible', 'Produit non configuré dans RevenueCat.');
+      Alert.alert(t('paywall.unavailableTitle'), t('paywall.unavailableBody'));
       return;
     }
     setPurchasing(tier.id);
@@ -110,7 +104,7 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
         closePaywall();
       }
     } catch (e: any) {
-      Alert.alert('Erreur', e?.message ?? 'Achat impossible.');
+      Alert.alert(t('paywall.errorTitle'), e?.message ?? t('paywall.errorPurchase'));
     } finally {
       setPurchasing(null);
     }
@@ -124,10 +118,10 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
         setIsPro(true);
         closePaywall();
       } else {
-        Alert.alert('Aucun achat trouvé', 'Aucun abonnement actif associé à ce compte.');
+        Alert.alert(t('paywall.noRestoreTitle'), t('paywall.noRestoreBody'));
       }
     } catch {
-      Alert.alert('Erreur', 'Impossible de restaurer les achats.');
+      Alert.alert(t('paywall.errorTitle'), t('paywall.errorRestore'));
     } finally {
       setRestoring(false);
     }
@@ -145,17 +139,15 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
       >
         {/* Hero */}
         <Text style={styles.crown}>🔥</Text>
-        <Text style={styles.heroTitle}>Streakly Pro</Text>
-        <Text style={styles.heroSub}>
-          Débloquez tout le potentiel de Streakly
-        </Text>
+        <Text style={styles.heroTitle}>{t('paywall.heroTitle')}</Text>
+        <Text style={styles.heroSub}>{t('paywall.heroSub')}</Text>
 
         {/* Benefits */}
         <View style={styles.benefitsCard}>
           {BENEFITS.map((b) => (
-            <View key={b.label} style={styles.benefitRow}>
+            <View key={b.labelKey} style={styles.benefitRow}>
               <Text style={styles.benefitEmoji}>{b.emoji}</Text>
-              <Text style={styles.benefitLabel}>{b.label}</Text>
+              <Text style={styles.benefitLabel}>{t(b.labelKey)}</Text>
             </View>
           ))}
         </View>
@@ -180,7 +172,7 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
                 >
                   {isRecommended ? (
                     <View style={styles.recommendedBadge}>
-                      <Text style={styles.recommendedBadgeText}>⭐ Populaire</Text>
+                      <Text style={styles.recommendedBadgeText}>{t('paywall.popular')}</Text>
                     </View>
                   ) : null}
                   <View style={styles.tierRow}>
@@ -215,13 +207,35 @@ export function PaywallScreen({ onClose }: PaywallScreenProps) {
           {restoring ? (
             <ActivityIndicator color={colors.textSecondary} />
           ) : (
-            <Text style={styles.restoreText}>Restaurer mes achats</Text>
+            <Text style={styles.restoreText}>{t('paywall.restore')}</Text>
           )}
         </Pressable>
 
-        <Text style={styles.legal}>
-          L'abonnement se renouvelle automatiquement. Annulable à tout moment.
-        </Text>
+        <Text style={styles.reassurance}>{t('paywall.reassurance')}</Text>
+        <Text style={styles.legal}>{t('paywall.legal')}</Text>
+        <View style={styles.legalLinks}>
+          <Pressable
+            onPress={() =>
+              void Linking.openURL(
+                'https://maxenceprocombalot-web.github.io/Streakly/terms.html',
+              )
+            }
+            hitSlop={8}
+          >
+            <Text style={styles.legalLink}>{t('paywall.termsLink')}</Text>
+          </Pressable>
+          <Text style={styles.legalDot}>·</Text>
+          <Pressable
+            onPress={() =>
+              void Linking.openURL(
+                'https://maxenceprocombalot-web.github.io/Streakly/privacy.html',
+              )
+            }
+            hitSlop={8}
+          >
+            <Text style={styles.legalLink}>{t('paywall.privacyLink')}</Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -377,6 +391,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
+  reassurance: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: spacing.xs,
+  },
   legal: {
     color: colors.textSecondary,
     fontSize: 11,
@@ -384,5 +405,22 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     opacity: 0.6,
     paddingHorizontal: spacing.md,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.xs,
+  },
+  legalLink: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    textDecorationLine: 'underline',
+  },
+  legalDot: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    opacity: 0.6,
   },
 });

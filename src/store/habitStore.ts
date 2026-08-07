@@ -24,6 +24,8 @@ interface HabitState {
   challenges: Challenge[];
   /** Habitudes ayant déjà reçu la notif identité 21j */
   identityNotifiedHabitIds: string[];
+  /** Jalons de streak déjà célébrés (3, 7, 30 jours…) */
+  celebratedMilestones: number[];
   addHabit: (draft: HabitDraft) => Promise<void>;
   addHabits: (drafts: HabitDraft[]) => Promise<void>;
   updateHabit: (id: string, patch: Partial<Habit>) => Promise<void>;
@@ -41,6 +43,7 @@ interface HabitState {
   startChallenge: (habitId: string) => boolean;
   completeChallenge: (challengeId: string) => void;
   markIdentityNotified: (habitId: string) => void;
+  markMilestoneCelebrated: (milestone: number) => void;
 }
 
 function generateId(): string {
@@ -100,6 +103,7 @@ export const useHabitStore = create<HabitState>()(
       jokerSavedDate: null,
       challenges: [],
       identityNotifiedHabitIds: [],
+      celebratedMilestones: [],
 
       addHabit: async (draft: HabitDraft) => {
         const habit = draftToHabit(draft);
@@ -257,6 +261,14 @@ export const useHabitStore = create<HabitState>()(
             : [...s.identityNotifiedHabitIds, habitId],
         }));
       },
+
+      markMilestoneCelebrated: (milestone: number) => {
+        set((s) => ({
+          celebratedMilestones: s.celebratedMilestones.includes(milestone)
+            ? s.celebratedMilestones
+            : [...s.celebratedMilestones, milestone],
+        }));
+      },
     }),
     {
       name: 'streakly-storage-v1',
@@ -281,9 +293,12 @@ export const useHabitStore = create<HabitState>()(
         if (state && !state.identityNotifiedHabitIds) {
           state.identityNotifiedHabitIds = [];
         }
+        if (state && !state.celebratedMilestones) {
+          state.celebratedMilestones = [];
+        }
         return state;
       },
-      version: 3,
+      version: 4,
       partialize: (state) => ({
         habits: state.habits,
         completions: state.completions,
@@ -291,6 +306,7 @@ export const useHabitStore = create<HabitState>()(
         jokerSavedDate: state.jokerSavedDate,
         challenges: state.challenges,
         identityNotifiedHabitIds: state.identityNotifiedHabitIds,
+        celebratedMilestones: state.celebratedMilestones,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {

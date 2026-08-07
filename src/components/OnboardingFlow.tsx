@@ -68,10 +68,13 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 
   const finish = async (): Promise<void> => {
     if (selectedHabits.length > 0) {
+      // Notifications activées d'office : les rappels sont le premier
+      // moteur de rétention — la permission est demandée au bon moment,
+      // juste après que l'utilisateur a choisi ses habitudes.
       const drafts: HabitDraft[] = selectedHabits.map((s) => ({
         ...s.draft,
         name: t(`onboarding.suggestions.${s.key}`),
-        notificationsEnabled: false,
+        notificationsEnabled: true,
       }));
       await addHabits(drafts);
     }

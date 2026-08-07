@@ -6,9 +6,10 @@ import { colors, radius, spacing } from '../constants/theme';
 interface FloatingActionButtonProps {
   onPress: () => void;
   bottom: number;
+  accessibilityLabel?: string;
 }
 
-export function FloatingActionButton({ onPress, bottom }: FloatingActionButtonProps) {
+export function FloatingActionButton({ onPress, bottom, accessibilityLabel }: FloatingActionButtonProps) {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -17,6 +18,8 @@ export function FloatingActionButton({ onPress, bottom }: FloatingActionButtonPr
         pressed && styles.pressed,
       ]}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
     >
       <LinearGradient
         colors={['#8b7dff', colors.accent]}

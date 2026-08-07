@@ -3,12 +3,17 @@ import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 
 import { useSettingsStore } from '../store/settingsStore';
 
-const BANNER_UNIT_ID = __DEV__
-  ? Platform.select({
-      ios: TestIds.ADAPTIVE_BANNER,
-      android: TestIds.ADAPTIVE_BANNER,
-    }) ?? TestIds.ADAPTIVE_BANNER
-  : 'ca-app-pub-8940748455732058/5292346978';
+// IDs d'unité AdMob de production, externalisés dans le .env (jamais commités).
+// Chaque plateforme a sa propre unité (convention AdMob).
+const PROD_BANNER_UNIT_ID = Platform.select({
+  ios: process.env.EXPO_PUBLIC_ADMOB_BANNER_IOS,
+  android: process.env.EXPO_PUBLIC_ADMOB_BANNER_ANDROID,
+});
+
+// En dev, ou si l'ID de prod n'est pas renseigné, on retombe sur les IDs de test
+// Google : jamais d'unité vide ni de « vraie » pub servie par erreur en développement.
+const BANNER_UNIT_ID =
+  __DEV__ || !PROD_BANNER_UNIT_ID ? TestIds.ADAPTIVE_BANNER : PROD_BANNER_UNIT_ID;
 
 export function AdBanner() {
   const isPro = useSettingsStore((s) => s.isPro);

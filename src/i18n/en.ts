@@ -179,7 +179,7 @@ export const en = {
   },
   settings: {
     title: 'Settings',
-    version: 'Version 1.0',
+    version: 'Version %{version}',
     language: 'Langue / Language',
     languageFr: 'Français 🇫🇷',
     languageEn: 'English 🇬🇧',

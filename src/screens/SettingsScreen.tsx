@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,6 +17,7 @@ export function SettingsScreen() {
   const jokerAvailable = isJokerAvailable(jokerUsedMonth);
   const proModeEnabled = useSettingsStore((s) => s.proModeEnabled);
   const setProModeEnabled = useSettingsStore((s) => s.setProModeEnabled);
+  const appVersion = Constants.expoConfig?.version ?? '1.0.0';
 
   const pickLocale = (next: AppLocale): void => {
     if (next !== locale) {
@@ -37,7 +39,7 @@ export function SettingsScreen() {
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Streakly</Text>
-        <Text style={styles.cardText}>{t('settings.version')}</Text>
+        <Text style={styles.cardText}>{t('settings.version', { version: appVersion })}</Text>
       </View>
 
       <View style={styles.card}>

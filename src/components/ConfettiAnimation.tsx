@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 
+import { useReducedMotion } from '../utils/useReducedMotion';
+
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 const COLORS = ['#7c6dfa', '#22c97a', '#f59e0b', '#ec4899', '#3b82f6', '#e8445a'];
 const COUNT = 40;
@@ -38,9 +40,10 @@ interface ConfettiAnimationProps {
 
 export function ConfettiAnimation({ active }: ConfettiAnimationProps) {
   const pieces = useRef<ConfettiPiece[]>(createPieces()).current;
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!active) {
+    if (!active || reducedMotion) {
       return;
     }
 
@@ -78,9 +81,9 @@ export function ConfettiAnimation({ active }: ConfettiAnimationProps) {
     });
 
     Animated.stagger(30, animations).start();
-  }, [active, pieces]);
+  }, [active, pieces, reducedMotion]);
 
-  if (!active) {
+  if (!active || reducedMotion) {
     return null;
   }
 
